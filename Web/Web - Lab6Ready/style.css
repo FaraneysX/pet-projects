@@ -1,0 +1,73 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    width: 850px;
+    margin: 30px auto;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.image {
+    float: right;
+    height: 25%;
+    width: 25%;
+}
+
+.title {
+    font-size: 35px;
+    margin: 0px 0px 20px;
+}
+
+h2 {
+    font-size: 23px;
+    line-height: 35px;
+    margin: 0px 0px 35px;
+}
+
+h3 {
+    font-size: 20px;
+    margin: 0px 0px 8px;
+}
+
+.ingredient-list,
+.cooking-list {
+    font-size: 18px;
+}
+
+.ingredient-list {
+    font-size: 18px;
+    margin: 0px 0px 35px;
+    width: 50%;
+}
+
+li {
+    margin: 0px 0px 8px;
+}
+
+li:last-child {
+    margin: 0px;
+}
+
+.ingredient-list li {
+    position: relative;
+    list-style: none inside;
+    font-style: italic;
+}
+
+.amount {
+    position: absolute;
+    left: 100%;
+    width: max-content;
+}
+
+.cooking-list li {
+    list-style: none;
+    background: left center no-repeat url("images/list-style-image.png");
+    background-size: 15px;
+    padding: 0px 0px 0px 20px;
+}

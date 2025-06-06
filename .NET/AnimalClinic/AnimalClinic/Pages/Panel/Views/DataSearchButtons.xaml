@@ -1,0 +1,66 @@
+﻿<Page x:Class="AnimalClinic.Pages.Panel.Views.DataSearchButtons"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:local="clr-namespace:AnimalClinic.Components"
+      mc:Ignorable="d"
+      >
+    <Page.Resources>
+        <Style
+            TargetType="Button"
+            BasedOn="{StaticResource MaterialDesignRaisedLightButton}"
+            />
+    </Page.Resources>
+    
+    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=FadeIn}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Text="Поиск данных"
+                HorizontalAlignment="Center"
+                />
+
+            <local:Separator Grid.Row="1" />
+
+            <StackPanel
+                Grid.Row="2"
+                Margin="30,10"
+                >
+                <Button x:Name="ClientsWithVisitsOnWeekendsButton"
+                        Content="Клиенты с посещениями в выходные дни"
+                        Margin="0,0,0,20"
+                        Click="ClientsWithVisitsOnWeekendsButton_Click"
+                        />
+
+                <Button x:Name="CatsOnlyButton"
+                        Content="Данные всех кошек"
+                        Margin="0,0,0,100"
+                        Click="CatsOnlyButton_Click"
+                        />
+
+                <Button x:Name="ResetButton"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Content="Сбросить"
+                        Click="ResetButton_Click"
+                        />
+            </StackPanel>
+
+            <materialDesign:Snackbar x:Name="Notification"
+                                     Grid.Row="3"
+                                     MessageQueue="{materialDesign:MessageQueue}"
+                                     />
+
+            <local:BackButton Grid.Row="4" />
+        </Grid>
+    </materialDesign:TransitioningContent>
+</Page>

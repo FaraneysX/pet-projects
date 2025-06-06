@@ -1,0 +1,93 @@
+﻿<Page x:Class="AnimalClinic.Pages.Panel.Views.DeletingVisitDataButtons"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:local="clr-namespace:AnimalClinic.Components"
+      mc:Ignorable="d"
+      >
+    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=FadeIn}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Text="Удаление данных посещения"
+                HorizontalAlignment="Center"
+                />
+
+            <local:Separator Grid.Row="1" />
+
+            <StackPanel
+                Grid.Row="2"
+                Margin="30,10"
+                >
+
+                <TextBlock Text="ID *" />
+                <TextBox x:Name="IdTextBox"
+                         Margin="0,0,0,20"
+                         TextChanged="IdTextBox_TextChanged"
+                         />
+
+                <TextBlock Text="ID клиента" />
+                <TextBox x:Name="ClientIdTextBox"
+                         Margin="0,0,0,20"
+                         TextChanged="ClientIdTextBox_TextChanged"
+                         />
+
+                <TextBlock Text="Офис *" />
+                <TextBox x:Name="OfficeTextBox"
+                         Margin="0,0,0,20"
+                         TextChanged="OfficeTextBox_TextChanged"
+                         />
+
+                <TextBlock Text="Дата *" />
+                <DatePicker x:Name="VisitDatePicker"
+                            Margin="0,0,0,20"
+                            SelectedDateChanged="VisitDatePicker_SelectedDateChanged"
+                            />
+
+                <TextBlock Text="Время *" />
+                <materialDesign:TimePicker x:Name="VisitTimePicker"
+                                           Margin="0,0,0,20"
+                                           SelectedTimeChanged="VisitTimePicker_SelectedTimeChanged"
+                                           />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Row="3"
+                Margin="0,0,0,50"
+                Width="300"
+                VerticalAlignment="Bottom"
+                >
+                <Button x:Name="DeleteDataButton"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Margin="0,0,0,25"
+                        Content="Удалить"
+                        Click="DeleteDataButton_Click"
+                        />
+
+                <Button x:Name="ResetButton"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Content="Сбросить"
+                        Click="ResetButton_Click"
+                        />
+            </StackPanel>
+
+            <materialDesign:Snackbar x:Name="Notification"
+                                     Grid.Row="4"
+                                     MessageQueue="{materialDesign:MessageQueue}"
+                                     />
+
+            <local:BackButton Grid.Row="5" />
+        </Grid>
+    </materialDesign:TransitioningContent>
+</Page>

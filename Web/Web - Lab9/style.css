@@ -1,0 +1,187 @@
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    position: relative;
+    margin: 200px auto;
+    width: 300px;
+    height: 300px;
+    perspective: 400px;
+}
+
+.container-1 {
+    position: relative;
+    margin: 200px auto;
+    width: 150px;
+    height: 150px;
+    perspective: 200px;
+}
+
+.cube-in {
+    margin: 80px 100px;
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    transform-style: preserve-3d;
+    animation-name: spin-2;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 10s;
+}
+
+.cube {
+    position: absolute;
+    width: inherit;
+    height: inherit;
+    transform-style: preserve-3d;
+    animation-name: spin-1;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 10s;
+}
+
+.side {
+    position: absolute;
+    border: 3px solid darkcyan;
+    text-align: center;
+    line-height: 300px;
+    width: inherit;
+    height: inherit;
+    background-color: antiquewhite;
+    opacity: 0.7;
+    box-shadow: inset 0 0 20px #8ecbde;
+}
+
+.side-in {
+    position: absolute;
+    border: 3px solid darkcyan;
+    text-align: center;
+    line-height: 150px;
+    width: 150px;
+    height: 150px;
+    background-color: aqua;
+    opacity: 0.7;
+    box-shadow: inset 0 0 20px #8ecbde;
+}
+
+.front {
+    /* Двигаем вперед на 150px */
+    transform: translateZ(150px);
+}
+
+.back {
+    /* Разворачиваем по оси Y и отдаляем по оси Z на 150px */
+    transform: rotateY(180deg) translateZ(150px);
+}
+
+.right {
+    /* Разворачиваем по оси Y и отдаляем по оси Z на 150px */
+    transform: rotateY(90deg) translateZ(150px);
+}
+
+.left {
+    transform: rotateY(-90deg) translateZ(150px);
+}
+
+.top {
+    transform: rotateX(90deg) translateZ(150px);
+}
+
+.bottom {
+    transform: rotateX(-90deg) translateZ(150px);
+}
+
+/* */
+.front-in {
+    /* Двигаем вперед на 150px */
+    transform: translateZ(75px);
+}
+
+.back-in {
+    /* Разворачиваем по оси Y и отдаляем по оси Z на 75ox */
+    transform: rotateY(180deg) translateZ(75px);
+}
+
+.right-in {
+    /* Разворачиваем по оси Y и отдаляем по оси Z на 75px */
+    transform: rotateY(90deg) translateZ(75px);
+}
+
+.left-in {
+    transform: rotateY(-90deg) translateZ(75px);
+}
+
+.top-in {
+    transform: rotateX(90deg) translateZ(75px);
+}
+
+.bottom-in {
+    transform: rotateX(-90deg) translateZ(75px);
+}
+
+@keyframes spin-1 {
+    from, to {
+        transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    }
+    50% {
+        transform: rotateX(90deg) rotateY(90deg) rotateZ(90deg);
+    }
+}
+
+@keyframes spin-2 {
+    from, to {
+        transform: rotateX(10deg) rotateY(10deg) rotateZ(10deg);
+    }
+    50% {
+        transform: rotateX(70deg) rotateY(70deg) rotateZ(50deg);
+    }
+}
+
+/*.container {
+    position: relative;
+    margin: 200px auto;
+}
+
+.cube {
+    animation-name: spin;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 10s;
+    transform-style: preserve-3d;
+    transform-origin: center;
+}
+
+.side {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border: 1px solid darkcyan;
+    background-color: burlywood;
+    line-height: 120px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: inset 0 0 20px #8ecbde;
+    opacity: .5;
+}
+
+@keyframes spin {
+    from, to {
+        transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    }
+    16% {
+        transform: rotateY(-90deg);
+    }
+    33% {
+        transform: rotateY(-90deg) rotateZ(90deg);
+    }
+    50% {
+        transform: rotateY(-180deg) rotateZ(90deg);
+    }
+    66% {
+        transform: rotateY(-270deg) rotateX(90deg);
+    }
+    83% {
+        transform: rotateX(90deg);
+    }
+}

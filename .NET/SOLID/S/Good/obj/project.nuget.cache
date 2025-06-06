@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "LN0c6T8bEZo=",
+  "success": true,
+  "projectFilePath": "C:\\code\\labs\\course_4\\semester_1\\csharp\\S\\Good\\Good.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Faraneys\\.nuget\\packages\\microsoft.dotnet.ilcompiler\\9.0.0\\microsoft.dotnet.ilcompiler.9.0.0.nupkg.sha512",
+    "C:\\Users\\Faraneys\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.0\\microsoft.net.illink.tasks.9.0.0.nupkg.sha512",
+    "C:\\Users\\Faraneys\\.nuget\\packages\\runtime.win-x64.microsoft.dotnet.ilcompiler\\9.0.0\\runtime.win-x64.microsoft.dotnet.ilcompiler.9.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,64 @@
+﻿<Application x:Class="AnimalClinic.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml"
+             >
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Импорт темы оформления Material Design -->
+                <materialDesign:BundledTheme
+                    BaseTheme="Light"
+                    PrimaryColor="DeepPurple"
+                    SecondaryColor="Lime"
+                    />
+                <!-- Импорт стандартных настроек Material Design -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Глобальные стили для элементов управления и текста -->
+            <Style TargetType="TextBlock">
+                <Setter Property="TextElement.Foreground"
+                        Value="{StaticResource MaterialDesignBody}"
+                        />
+
+                <Setter Property="TextElement.FontWeight"
+                        Value="Medium"
+                        />
+
+                <Setter Property="FontFamily"
+                        Value="{materialDesign:MaterialDesignFont}"
+                        />
+            </Style>
+
+            <Style TargetType="Control">
+                <Setter Property="Background"
+                        Value="{StaticResource MaterialDesignPaper}"
+                        />
+
+                <Setter Property="FontFamily"
+                        Value="{materialDesign:MaterialDesignFont}"
+                        />
+            </Style>
+
+            <!-- Стиль для чекбокса -->
+            <Style TargetType="CheckBox"
+                   BasedOn="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}"
+                   >
+                <Setter Property="HorizontalAlignment"
+                        Value="Stretch"
+                        />
+            </Style>
+
+            <!-- Стиль для вкладки -->
+            <Style TargetType="TabItem"
+                   BasedOn="{StaticResource MaterialDesignTabItem}"
+                   >
+                <Setter Property="Cursor"
+                        Value="Hand"
+                        />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,173 @@
+section .bss
+    input resb 256
+section .data
+    wordStart db 0
+    ten dq 10
+    newLine db 13
+    numBuffer db 12 dup(0)
+
+section .text
+global _start
+
+_start:
+    ; Считать ввод
+    mov eax, 0          ; syscall number for sys_read
+    mov edi, 0          ; file descriptor 0 (stdin)
+    mov rsi, input      ; pointer to buffer
+    mov edx, 256        ; number of bytes to read
+    syscall
+
+    ; Вывести ввод
+    mov eax, 1          ; syscall number for sys_write
+    mov edi, 1          ; file descriptor 1 (stdout)
+    mov rsi, input      ; pointer to buffer
+    syscall
+
+    call print_new_line
+
+    ; Передача параметров в процедуру через стек
+    push rax ; передаём количество считанных символов
+    lea rax, [input]      ; помещаем адрес ввода в rax
+    push rax            ; помещаем адрес ввода на стек
+    call count_same_start
+    add rsp, 8          ; корректируем стек после вызова
+
+    call print_int
+
+    ; Выход из программы
+    mov eax, 60         ; syscall number for sys_exit
+    xor edi, edi        ; exit code 0
+    syscall
+
+; Процедура для подсчета количества пар слов, начинающихся с одной и той же буквы
+count_same_start:
+    push rdi
+    push rsi
+    push rcx
+    push rdx
+    push rbx
+
+    mov rdi, [rsp + 48] ; адрес строки
+    mov rcx, [rsp + 56]
+    xor rdx, rdx        ; счетчик совпадений
+    xor rax, rax        ; обнуляем rax
+    cld
+
+    ; Поиск первой буквы первого слова
+    .find_first_letter:
+        mov al, ' '       ; Устанавливаем разделитель слов
+        repe scasb        ; Ищем первый символ
+        cmp rcx, 0 
+        je .done          ; Если достигнут конец строки, завершаем 
+        dec rdi
+        inc rcx
+        mov bl, [rdi]        ; Сохраняем первую букву в bl
+        jmp .find_next_word
+
+    ; Поиск следующего слова
+    .find_next_word:
+        mov al, ' '       ; Устанавливаем разделитель слов
+        repne scasb        ; Ищем следующий пробел
+        repe scasb       ; Ищем начало слова
+        cmp rcx, 0 
+        je .check_last    ; Если достигнут конец строки, проверяем последнее слово
+        dec rdi
+        inc rcx
+        mov al, [rdi]
+        cmp bl, al        ; Сравниваем буквы
+        mov bl ,al
+        jne .find_next_word
+        inc rdx           ; Увеличиваем счетчик, если буквы совпали
+        jmp .find_next_word
+
+    .check_last:
+        cmp bl, al        ; Проверяем последнее слово
+        je .increment
+        jmp .done
+
+    .increment:
+        inc rdx
+
+    .done:
+        mov rax, rdx      ; Помещаем результат в rax
+
+    pop rbx
+    pop rdx
+    pop rcx
+    pop rsi
+    pop rdi
+    ret
+
+
+print_int:
+
+    push rdi
+    push rsi
+    push rax
+    push rcx
+    push rdx
+    push rbx
+    
+    ; rax содержит число для печати
+    lea rbx, [numBuffer + 11] ; используем rbx для хранения конечного адреса буфера
+    mov byte [rbx], 0        ; завершающий символ
+
+    ; проверка на отрицательное число
+    test rax, rax
+    jge .positiveNumber
+    neg rax   ; делаем число положительным
+    dec rbx   ; уменьшаем указатель буфера
+    mov byte [rbx], '-' ; ставим знак минус
+
+.positiveNumber:
+    ; преобразование числа в строку
+.loop:
+    dec rbx               ; уменьшаем указатель буфера
+    xor rdx, rdx          ; очищаем rdx перед делением
+    div qword [ten]      ; деление rax на 10, результат в rax, остаток в rdx
+    add dl, '0'          ; преобразование остатка в символ
+    mov [rbx], dl        ; сохраняем символ в буфере
+    test rax, rax        ; проверка, равно ли число нулю
+    jnz .loop
+
+    ; вывод строки на экран
+    mov rax, 1            ; sys_write
+    mov rdi, 1            ; файловый дескриптор stdout
+    mov rsi, rbx          ; адрес начала строки в буфере
+    lea rdx, [numBuffer + 11]
+    sub rdx, rbx          ; вычисляем длину строки
+    syscall
+
+    pop rbx
+    pop rdx
+    pop rcx
+    pop rax
+    pop rsi
+    pop rdi
+    
+    ret
+
+
+print_new_line:
+    ; Сохраняем состояние регистров
+    push rax
+    push rdi
+    push rsi
+    push rdx
+    push rcx
+
+    ; Параметры для системного вызова write:
+    mov rax, 1          ; Номер системного вызова: 1 (sys_write)
+    mov rdi, 1          ; Дескриптор файла: 1 (stdout)
+    mov rsi, newLine      ; Указатель на строку с пробелом
+    mov rdx, 1          ; Длина строки: 1 байт
+
+    syscall             ; Вызываем системный вызов
+
+    ; Восстанавливаем состояние регистров
+    pop rcx
+    pop rdx
+    pop rsi
+    pop rdi
+    pop rax
+    ret

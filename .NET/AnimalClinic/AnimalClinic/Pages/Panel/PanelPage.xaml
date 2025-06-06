@@ -1,0 +1,53 @@
+﻿<Page x:Class="AnimalClinic.Pages.Panel.PanelPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      >
+    <!-- Окно для отображения содержимого с эффектом перехода -->
+    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=FadeIn}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!-- Определение двух столбцов -->
+                <ColumnDefinition Width="500" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Фрейм для отображения кнопок управления -->
+            <Frame x:Name="ButtonsView"
+                   Grid.Column="0"
+                   NavigationUIVisibility="Hidden"
+                   Margin="20"
+                   />
+
+            <!-- Область для отображения данных из базы данных и уведомлений -->
+            <Grid
+                Grid.Column="1"
+                Margin="20"
+                >
+                <Grid.RowDefinitions>
+                    <!-- Первая строка занимает всю доступную высоту -->
+                    <RowDefinition Height="*" />
+                    <!-- Вторая строка высотой по содержимому -->
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Таблица для отображения данных из базы данных -->
+                <DataGrid x:Name="DatabaseDataGrid"
+                          Grid.Column="0"
+                          Visibility="Hidden"
+                          AutoGenerateColumns="False"
+                          />
+
+                <!-- Уведомления об успешном выполнении операций -->
+                <materialDesign:Snackbar x:Name="SuccessfulNotification"
+                                         Grid.Row="1"
+                                         HorizontalAlignment="Right"
+                                         MessageQueue="{materialDesign:MessageQueue}"
+                                         />
+            </Grid>
+        </Grid>
+    </materialDesign:TransitioningContent>
+</Page>

@@ -1,0 +1,198 @@
+﻿@model ProfileViewModel
+
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">Личный кабинет</h2>
+        <form asp-controller="Profile" asp-action="Logout" method="post" class="m-0">
+            <button type="submit" class="btn btn-danger">Выйти</button>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Информация о пользователе</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Имя:</strong> @Model.Name</p>
+                    <p><strong>Фамилия:</strong> @Model.Surname</p>
+                    <p><strong>Почта:</strong> @Model.Email</p>
+                </div>
+            </div>
+        </div>
+
+        @if (!Model.IsAdmin)
+        {
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">Мои книги</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.UserBooks?.Count > 0)
+                        {
+                            <ul class="list-group">
+                                @foreach (var book in Model.UserBooks)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>@book.Title</strong> <br/>
+                                            <small class="text-muted">Автор: @book.Author</small>
+                                        </div>
+                                        <form asp-controller="Profile" asp-action="RemoveBook" method="post"
+                                              class="m-0">
+                                            <input type="hidden" name="BookTitle" value="@book.Title"/>
+                                            <input type="hidden" name="BookAuthor" value="@book.Author"/>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">Удалить</button>
+                                        </form>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>У вас нет книг.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="card-title mb-0">Добавить новую книгу</h5>
+                    </div>
+                    <div class="card-body">
+                        <form asp-controller="Profile" asp-action="AddNewBook" method="post">
+                            <div class="mb-3">
+                                <label for="BookTitle" class="form-label">Название книги</label>
+                                <input type="text" class="form-control" id="BookTitle" name="BookTitle" required/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="BookAuthor" class="form-label">Автор</label>
+                                <input type="text" class="form-control" id="BookAuthor" name="BookAuthor" required/>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Добавить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">Доступные книги</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.AvailableBooks?.Count > 0)
+                    {
+                        <ul class="list-group">
+                            @foreach (var book in Model.AvailableBooks)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@book.Title</strong> <br/>
+                                        <small class="text-muted">Автор: @book.Author</small>
+                                    </div>
+                                    @if (!Model.IsAdmin)
+                                    {
+                                        <form asp-controller="Profile" asp-action="AddBook" method="post" class="m-0">
+                                            <input type="hidden" name="BookTitle" value="@book.Title"/>
+                                            <input type="hidden" name="BookAuthor" value="@book.Author"/>
+                                            <button type="submit" class="btn btn-outline-primary btn-sm">Добавить к
+                                                себе
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex gap-2">
+                                            <form asp-controller="Profile" asp-action="RemoveBookFromList" method="post"
+                                                  class="m-0">
+                                                <input type="hidden" name="BookTitle" value="@book.Title"/>
+                                                <input type="hidden" name="BookAuthor" value="@book.Author"/>
+                                                <button type="submit" class="btn btn-outline-danger btn-sm">Удалить
+                                                </button>
+                                            </form>
+                                            <button type="button" class="btn btn-outline-warning btn-sm"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editBookModal"
+                                                    data-title="@book.Title"
+                                                    data-author="@book.Author">
+                                                Изменить
+                                            </button>
+                                        </div>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>Нет доступных книг.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editBookModal" tabindex="-1" aria-labelledby="editBookModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editBookModalLabel">Редактировать книгу</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editBookForm" asp-controller="Profile" asp-action="SaveBookChanges" method="post">
+                    <input type="hidden" id="OriginalTitle" name="originalTitle"/>
+                    <input type="hidden" id="OriginalAuthor" name="originalAuthor"/>
+                    <div class="mb-3">
+                        <label for="ModalBookTitle" class="form-label">Название книги</label>
+                        <input type="text" class="form-control" id="ModalBookTitle" name="newTitle" required/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ModalBookAuthor" class="form-label">Автор</label>
+                        <input type="text" class="form-control" id="ModalBookAuthor" name="newAuthor" required/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const editBookModal = document.getElementById('editBookModal');
+        editBookModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const title = button.getAttribute('data-title');
+            const author = button.getAttribute('data-author');
+
+            fetch(`/get-book-details?bookTitle=${encodeURIComponent(title)}&bookAuthor=${encodeURIComponent(author)}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Ошибка загрузки данных книги');
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('OriginalTitle').value = title;
+                    document.getElementById('OriginalAuthor').value = author;
+                    document.getElementById('ModalBookTitle').value = data.title;
+                    document.getElementById('ModalBookAuthor').value = data.author;
+                })
+                .catch(error => console.error('Ошибка:', error));
+        });
+    });
+</script>

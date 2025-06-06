@@ -1,0 +1,313 @@
+.MODEL SMALL ; Объявление модели памяти Small (16-битная модель)
+.STACK 100h  ; Выделение стека размером 100h (256 байт)
+
+.DATA 
+    size dw ?               ; Размер массива (16 бит)             
+    array dw 256 dup (?)    ; Массив размером 256 слов (по 16 бит)                                  
+    
+    is_neg dw ?             ; Флаг для указания на отрицательное число
+    
+    result dw ?             ; Результат выполнения процедуры  
+
+    input_size_msg db "Enter the array size: $"
+    input_array_msg db "Enter array elements (separated by Enter): $"
+    output_array_msg db "Input array: $"
+    
+    msg_yes db "All positive numbers come before negative ones.$"
+    msg_no db "Some negative numbers stand between the positive ones.$"
+    
+    new_line db 0dh, 0ah, '$'
+
+.CODE          
+_start:                                                                     
+    mov ax, @DATA ; Инициализация сегмента данных
+    mov ds, ax    ; Загрузка сегмента данных в регистр ds
+
+;-----------------------------------------       
+; Ввод размера массива в ax        
+    mov ah, 9                     
+    mov dx, offset input_size_msg ; write input_size_msg ; Загрузка адреса строки input_size_msg
+    int 21h                       
+    call ReadInteger ; Вызов процедуры для чтения целого числа              
+    mov size, ax     ; Сохранение введенного размера в переменную size
+    call WriteNewLine             
+;-----------------------------------------                                                                   
+;
+    mov ah, 9			    ;
+    mov dx, offset input_array_msg  ; Печать input_array_msg
+    int 21h			    ;
+    call WriteNewLine
+    
+    mov di, offset array  ; Загрузка адреса массива в di
+    mov cx, size          ; Загрузка размера массива в cx 
+    
+read_next_elem:
+    call ReadInteger      ; Вызов процедуры для чтения элемента
+    call WriteNewLine
+    mov [di], ax          ; Запись текущего элемента в массив
+    add di, 2             ; Смещение адреса для получения адреса следующей ячейки массива
+    loop read_next_elem   ; Повторение, пока CX > 0 (читаем, пока не заполним весь массив)
+    call WriteNewLine
+;-----------------------------------------    
+; Печать массива
+    mov ah, 9                       
+    mov dx, offset output_array_msg  ; Печать output_array_msg
+    int 21h               
+                 
+    mov di, offset array  ; Загрузка адреса массива в регистр di
+    mov cx, size          ; Загрузка размера массива в регистр x
+    
+write_next_elem:
+    mov ax, [di]          ; Перемещаем текущий элемент в регистр AX
+    add di, 2             ; Смещаем адрес, чтобы получить адрес следующей ячейки вывода
+    
+    call WriteInteger     ; Выводим текущее число                       
+    
+    mov al,' '           ; Устанавливаем значение ' ' в регистр al
+    call WriteChar        ; Выводим пробел              
+    
+    loop write_next_elem  ; Повторяем цикл, пока CX > 0       
+    call WriteNewLine     ; Выводим новую строку
+;-----------------------------------------
+; Обработка массива и вывод результата
+    push offset result      ; Помещаем адрес результата в стек
+    push offset array       ; Помещаем адрес массива в стек
+    push offset size        ; Помещаем адрес размера массива в стек
+    
+    call AllPosAreBeforeNeg ; Вызываем процедуру задачи              
+    
+    cmp result, 0           ; Проверяем результат
+    je write_msg_no         ; Если результат равен 0, переходим к выводу сообщения "msg_no"
+            
+write_msg_yes:                                                            
+    mov dx, offset msg_yes   ; set msg_yes for output 
+    jmp write_res_msg        
+    
+write_msg_no:
+    mov dx, offset msg_no   ; set msg_no for output 
+    jmp write_res_msg         
+    
+write_res_msg:
+    mov ah, 9h    ; write result message
+    int 21h       ;
+    int 20h       ; program end         
+    
+;-----------------------------------------
+
+; Процедура задачи
+AllPosAreBeforeNeg PROC
+    push bp           ; Сохраняем регистры
+    mov bp, sp;       ; Инициализируем указатель базы стека
+    
+    push di           ; Сохраняем регистры
+    push cx           ; 
+    push si           ; 
+    push di           ; 
+    push ax           ;   
+    push bx           ;
+
+    mov di, [bp  + 4] ; di := Адрес размера массива, переданный в стеке
+    mov cx, [di]      ; cx := Значение размера массива
+    mov si, [bp + 6]  ; si := Адрес массива, переданный в стеке
+    mov di, [bp + 8]  ; di := Адрес результата, переданный в стеке
+    
+    mov bx, 0         ; Инициализируем bx нулем (BX содержит флаг negFoundFlag)
+                                  
+check_order:           
+    mov ax, [si]      ; Загружаем текущий элемент в ax
+    cmp ax, 0         ; Проверяем текущий элемент на отрицательность
+    jl negative_found ; Если текущий элемент отрицательный, устанавливаем флаг negFoundFlag  
+    cmp ax, 0         ; Если текущий элемент равен нулю,
+    je next           ; то переходим к следующему элементу массива
+    cmp bx, 0         ; Проверяем флаг negFoundFlag
+    jne return_false  ; Если negFoundFlag == true И текущий элемент > 0, возвращаем false
+    
+next:           
+    add si, 2         ; Переходим к следующему элементу массива
+    loop check_order  ; Проверяем порядок, пока CX > 0 (size > 0)
+    jmp return_true   ; Возвращаем true (если массив закончен) 
+    
+negative_found:
+    mov bx, 1         ; Устанавливаем 1 в BX для установки флага negFoundFlag
+    jmp next          ; Переходим к следующему элементу массива
+
+return_false:          
+    mov [di], 0       ; result := false
+    jmp end_proc      ; 
+
+return_true:           
+    mov [di], 1       ; result := true 
+
+end_proc:
+    pop bx            ; Восстановление регистров
+    pop ax            ;
+    pop di            ;
+    pop si            ; 
+    pop cx            ; 
+    pop di            ;
+    pop bp            ; 
+    ret 6             ; Возврат из процедуры с удалением параметров      
+AllPosAreBeforeNeg ENDP               
+
+;----------------------------------------- 
+
+WriteNewLine PROC          
+    ; Сохранение регистров
+    push ax   
+    push dx   
+    
+    mov ah, 9h
+    mov dx, offset new_line ; Загружаем адрес строки new_line в регистр dx
+    int 21h
+                        
+    ; Восстановление регистров                        
+    pop dx    
+    pop ax    
+    ret
+WriteNewLine ENDP     
+
+;-----------------------------------------  
+
+; Ввод целых чисел в ax
+ReadInteger PROC                    
+    ; Сохранение регистров в стеке
+    push cx
+    push bx       
+    push dx 
+    
+    mov is_neg, 0 ; Инициализация флага
+    xor cx, cx    ; Сбрасываем cx (в нем будет храниться результат)
+    mov bx, 10    ; Множитель 10 для построения числа
+    
+    call ReadChar ; Вызов процедуры для чтения первого символа
+             
+    ; Если первый символ '-', то число отрицательное, ставим флаг
+    cmp al, '-'    
+    je neg_num
+    jmp not_neg_num
+    
+neg_num:
+    mov is_neg, 1 ; Ставим флаг на 1
+    
+read_next:
+    call ReadChar ; read current character
+    
+not_neg_num: 
+    cmp al, 13    ; Проверяем, является ли текущий символ Enter
+    je done       ; Если да, переходим к метке done (конец ввода)
+    
+    sub al, '0'   ; Вычитаем код символа '0', чтобы преобразовать символ в число
+    
+    xor ah, ah    ; Обнуляем регистр ah
+    xor dx, dx    ; Обнуляем регистр dx
+
+    ; Меняем значения регистров cx и ax местами (теперь cx - полученное число, ax - прочитанная цифра)
+    xchg cx, ax
+                  
+    mul bx        ; Умножаем содержимое BX (10) на AX (считанный символ)
+    
+    add ax, cx    ; Добавляем считанный символ к последней цифре результата (теперь AX - результат, CX - считанный символ)
+    xchg ax, cx   ; Снова меняем значения регистров AX и CX местами, освобождая AX для следующих операций
+    jmp read_next ; Переходим к чтению следующей цифры
+    
+done:
+    xchg ax, cx     ; Меняем значения регистров AX и CX местами, после этого в AX содержится результат
+    
+    cmp is_neg, 1   ; Сравниваем флаг is_neg с 1
+    je set_neg      ; Если is_neg равен 1 (true), переходим к метке set_neg                     
+    jmp set_not_neg ; В противном случае переходим к метке set_not_neg
+    
+set_neg:
+    neg ax          ; Изменяем знак числа в регистре AX
+                                                          
+set_not_neg:
+    ; Восстановление регистров 
+    pop dx
+    pop bx          
+    pop cx
+    ret       
+ReadInteger ENDP
+
+;-----------------------------------------
+
+; Ввод символа
+ReadChar PROC
+    mov ah, 1 ; Ввод одного символа с клавиатуры
+    int 21h  
+    ret
+ReadChar ENDP  
+ 
+;-----------------------------------------
+
+; output a 10-digit number
+WriteInteger PROC   
+    ; Сохранение регистров
+    push ax         
+    push cx       
+    push bx         
+    push dx        
+    
+    xor cx, cx ; Обнуляем счетчик цифр (количество разрядов)     
+    mov bx, 10 ; Загружаем 10 в регистр bx (множитель для деления)     
+    cmp ax, 0  ; Сравниваем значение в регистре ax с 0     
+    jl if_neg  ; Если значение в ax отрицательное, переходим к метке if_neg     
+    jmp get_dig ; ; Иначе переходим к метке get_dig   
+
+; print minus and change sign
+if_neg:
+    push ax         ; Сохраняем число в стеке
+    MOV al, '-'     ; Загружаем символ минуса в регистр al
+    call WriteChar  ; Вызываем процедуру вывода символа
+    pop ax          ; Восстанавливаем число из стека
+    neg ax          ; Меняем знак числа на противоположный
+
+; get digits and push them into stack,
+; cx holds the count of received digits
+get_dig:
+    xor dx, dx      ; Обнуляем dx (остаток от деления)
+    
+    div bx          ; Делим AX на BX. Целая часть в AX, остаток в DX
+    
+    push dx         ; Записываем остаток (текущую цифру) в стек
+                    
+    inc cx          ; Увеличиваем счетчик цифр
+    cmp ax, 0       ; Проверяем, закончилось ли число
+    jg get_dig      ; Если нет, то переходим к следующей итерации
+
+write_dig:
+    pop ax          ; Извлекаем цифру из стека        
+    add al, '0'     ; Преобразуем цифру в ASCII код
+    
+    call WriteChar  ; Выводим символ
+    loop write_dig  ; Повторяем, пока не выведем все цифры
+     
+    ; Восстанавливаем регистры
+    pop dx          
+    pop bx           
+    pop cx         
+    pop ax          
+    ret
+WriteInteger ENDP       
+
+;-----------------------------------------
+
+WriteChar PROC              
+    ; Сохранение регистров
+    push ax    
+    push dx    
+    
+    mov dl, al ; Перемещаем выводимый символ в регистр dl
+    mov ah, 2  ; Устанавливаем 2 - вывод одного символа в стандартный вывод  
+    int 21h
+          
+    ; Восстановление регистров
+    pop dx     
+    pop ax     
+    ret
+WriteChar ENDP
+
+;-----------------------------------------
+
+end _start    
+
+

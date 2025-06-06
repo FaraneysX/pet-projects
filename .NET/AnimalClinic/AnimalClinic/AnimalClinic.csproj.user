@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Components\BackButton.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Components\Separator.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ExitWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\PanelPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\AddingAnimalDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\AddingClientDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\AddingDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\AddingVisitDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\ChangingAnimalDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\ChangingClientDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\ChangingDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\ChangingVisitDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\DataSearchButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\DeletingAnimalDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\DeletingClientDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\DeletingDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\DeletingVisitDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\EditingDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\MainButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Panel\Views\ViewDataButtons.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Start\StartPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Components\BackButton.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Components\Separator.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ExitWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\PanelPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\AddingAnimalDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\AddingClientDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\AddingDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\AddingVisitDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\ChangingAnimalDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\ChangingClientDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\ChangingDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\ChangingVisitDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\DataSearchButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\DeletingAnimalDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\DeletingClientDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\DeletingDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\DeletingVisitDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\EditingDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\MainButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Panel\Views\ViewDataButtons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Start\StartPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

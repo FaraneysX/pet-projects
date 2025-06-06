@@ -1,0 +1,63 @@
+﻿<Page x:Class="AnimalClinic.Pages.Panel.Views.EditingDataButtons"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:local="clr-namespace:AnimalClinic.Components"
+      mc:Ignorable="d"
+      >
+    <Page.Resources>
+        <Style
+            TargetType="Button"
+            BasedOn="{StaticResource MaterialDesignRaisedLightButton}"
+            />
+    </Page.Resources>
+
+    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=FadeIn}">
+        <Grid
+            Width="250"
+            HorizontalAlignment="Left"
+            >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Text="Редактирование данных"
+                HorizontalAlignment="Center"
+                />
+
+            <local:Separator Grid.Row="1" />
+
+            <Button x:Name="AddingDataButton"
+                    Grid.Row="2"
+                    Content="Добавление данных"
+                    Margin="5"
+                    Click="AddingDataButton_Click"
+                    />
+
+            <Button x:Name="ChangingDataButton"
+                    Grid.Row="3"
+                    Content="Изменение данных"
+                    Margin="5"
+                    Click="ChangingDataButton_Click"
+                    />
+
+            <Button x:Name="DeletingDataButton"
+                    Grid.Row="4"
+                    Content="Удаление данных"
+                    Margin="5"
+                    Click="DeletingDataButton_Click"
+                    />
+
+            <local:BackButton Grid.Row="5" />
+        </Grid>
+    </materialDesign:TransitioningContent>
+</Page>

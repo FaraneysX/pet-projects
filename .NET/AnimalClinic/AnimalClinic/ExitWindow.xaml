@@ -1,0 +1,40 @@
+﻿<!-- Определение класса окна выхода -->
+<Window x:Class="AnimalClinic.ExitWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        WindowState="Maximized"
+        >
+    <!-- Панель для размещения элементов по стеку -->
+    <StackPanel
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        >
+        <!-- Текстовый блок с сообщением о выходе -->
+        <TextBlock
+            Text="Вы действительно хотите выйти?"
+            Margin="30"
+            FontSize="16"
+            />
+
+        <!-- Равномерная сетка для размещения двух кнопок -->
+        <UniformGrid Columns="2">
+            <Button x:Name="NoExitButton"
+                    Style="{StaticResource MaterialDesignOutlinedDarkButton}"
+                    Content="Нет"
+                    Margin="0,0,10,0"
+                    Click="NoExitButton_Click"
+                    />
+
+            <!-- Кнопка для подтверждения выхода -->
+            <Button x:Name="YesExitButton"
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    Content="Да"
+                    Margin="10,0,0,0"
+                    Click="YesExitButton_Click"
+                    />
+        </UniformGrid>
+    </StackPanel>
+</Window>

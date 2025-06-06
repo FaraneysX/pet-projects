@@ -1,0 +1,63 @@
+﻿@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Вход";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="card shadow-sm rounded-4" style="width: 100%; max-width: 400px; border-radius: 12px;">
+        <div class="card-header text-center bg-white border-0">
+            <h2 class="m-0" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333;">Вход</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" asp-action="Index">
+                <div class="text-danger">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Почта</label>
+                    <input type="email" class="form-control form-control-lg" id="Email" name="Email"
+                           placeholder="Введите почту" style="border-radius: 10px;"/>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label for="Password" class="form-label">Пароль</label>
+                    <input type="password" class="form-control form-control-lg" id="Password" name="Password"
+                           placeholder="Введите пароль" style="border-radius: 10px;"/>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-2"
+                        style="border-radius: 10px; font-size: 1.1rem; transition: all 0.3s ease;">Войти
+                </button>
+            </form>
+        </div>
+        <div class="card-footer text-center border-0">
+            <p class="mb-0" style="font-size: 0.9rem;">Нет аккаунта? <a href="@Url.Action("Index", "Registration")"
+                                                                        class="text-primary"
+                                                                        style="text-decoration: none; font-weight: 500;">Зарегистрироваться</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        transform: translateY(-3px);
+    }
+
+    .card {
+        background: #fff;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .card:hover {
+        background-color: #f7f7f7;
+    }
+</style>

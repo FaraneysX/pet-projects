@@ -1,0 +1,70 @@
+DROP TABLE IF EXISTS book;
+CREATE TABLE IF NOT EXISTS book
+(
+    id      SERIAL PRIMARY KEY,
+    title   TEXT NOT NULL,
+    created DATE NOT NULL
+);
+
+DO
+$$
+    DECLARE
+        i          INTEGER := 1;
+        start_date DATE    := '2020-01-01';
+    BEGIN
+        FOR i IN 1..100
+            LOOP
+                INSERT INTO book (title, created)
+                VALUES (FORMAT('Book_%s', i),
+                        start_date + (i % 1050)::INTEGER);
+            END LOOP;
+    END
+$$;
+
+DROP DATABASE IF EXISTS copy;
+
+-- Создание пустой БД.
+CREATE DATABASE copy
+    WITH TEMPLATE template1;
+
+-- Копия таблицы book в файл.
+COPY "book"
+    TO 'C:\code\labs\course_4\semester_1\db\lab_6\book.txt';
+
+-- Очистка таблицы.
+TRUNCATE book;
+
+SELECT *
+FROM book;
+
+-- Вставка данных в таблицу из файла.
+COPY "book"
+    FROM 'C:\code\labs\course_4\semester_1\db\lab_6\book.txt';
+
+---------------------------------------------------------------------------------------------
+
+-- Копирование всей БД.
+-- pg_dump -d copy -U postgres -f "C:\code\labs\course_4\semester_1\db\lab_6\copy_db.txt"
+
+-- Восстановление БД из файла.
+-- psql -d copy -U postgres -f "C:\code\labs\course_4\semester_1\db\lab_6\copy_db.txt"
+
+---------------------------------------------------------------------------------------------
+
+-- Копирование всей БД в формате каталога, который содержит несколько файлов.
+-- pg_dump -d copy -U postgres -f "C:\code\labs\course_4\semester_1\db\lab_6\copy_db" -F directory
+
+-- Восстановление БД из директории.
+-- pg_restore -d copy -U postgres "C:\code\labs\course_4\semester_1\db\lab_6\copy_db"
+
+-- Копирование кластера.
+-- pg_dumpall -U postgres -f "C:\code\labs\course_4\semester_1\db\lab_6\cluster.txt" -v
+
+-- Восстановление кластера.
+-- psql -U postgres -f "C:\code\labs\course_4\semester_1\db\lab_6\cluster.txt"
+
+-- Отключение сервера.
+-- pg_ctl -D "C:\Program Files\PostgreSQL\17\data" stop
+
+-- Запуск сервера.
+-- pg_ctl start -D "C:\Program Files\PostgreSQL\17\data_1"

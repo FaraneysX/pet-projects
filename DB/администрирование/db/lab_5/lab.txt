@@ -1,0 +1,100 @@
+SELECT name, setting
+FROM pg_settings
+WHERE name IN ('logging_collector',
+               'lc_messages',
+               'log_statement',
+               'log_duration',
+               'log_min_duration_statement');
+
+DROP TABLE book;
+CREATE TABLE book
+(
+    id      SERIAL PRIMARY KEY,
+    title   TEXT NOT NULL,
+    created DATE NOT NULL
+);
+
+DO
+$$
+    DECLARE
+        i          INTEGER := 1;
+        start_date DATE    := '2020-01-01';
+    BEGIN
+        FOR i IN 1..1000
+            LOOP
+                INSERT INTO book (title, created)
+                VALUES (FORMAT('Book_%s', i),
+                        start_date + (i % 1050)::INTEGER);
+            END LOOP;
+    END
+$$;
+
+SHOW shared_preload_libraries;
+
+-- Сбор статистики.
+SELECT query, calls, total_exec_time, mean_exec_time, min_exec_time, max_exec_time
+FROM pg_stat_statements
+ORDER BY total_exec_time DESC
+LIMIT 5;
+
+-- Отслеживание блокировок.
+SELECT blocked_query.pid, blocked_query.query, blocking_query.pid, blocking_query.query
+FROM pg_stat_activity blocked_query
+         JOIN pg_locks blocked_locks ON blocked_query.pid = blocked_locks.pid
+         JOIN pg_locks blocking_locks ON blocking_locks.transactionid = blocked_locks.transactionid
+         JOIN pg_stat_activity blocking_query ON blocking_query.pid = blocking_locks.pid
+WHERE blocked_locks.granted = false
+  AND blocking_locks.granted = true;
+
+BEGIN;
+
+UPDATE book
+SET title = 'title1'
+WHERE id = 1;
+
+SELECT pg_sleep(15);
+SELECT pg_backend_pid();
+
+COMMIT;
+
+--------------------------------------------
+
+BEGIN;
+
+UPDATE book
+SET title = 'title1'
+WHERE id = 1;
+
+SELECT pg_sleep(10);
+
+UPDATE book
+SET title = 'title1'
+WHERE id = 2;
+
+COMMIT;
+
+BEGIN;
+
+UPDATE book
+SET title = 'title2'
+WHERE id = 1;
+
+SELECT pg_backend_pid();
+
+COMMIT;
+
+--------------------------------------------
+
+BEGIN;
+
+UPDATE book
+SET title = 'title2'
+WHERE id = 2;
+
+SELECT pg_sleep(10);
+
+UPDATE book
+SET title = 'title2'
+WHERE id = 1;
+
+COMMIT;
