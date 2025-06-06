@@ -23,9 +23,6 @@ WHERE created_at BETWEEN '2020-01-01' AND '2020-12-30';
 
 
 
-
-
-
 -- "Gather  (cost=1000.00..12578.43 rows=1 width=19) (actual time=0.275..40.347 rows=1 loops=1)"
 -- "  Workers Planned: 2"
 -- "  Workers Launched: 2"

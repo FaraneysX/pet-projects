@@ -1,11 +1,11 @@
 -- Многоверсионность.
 GRANT SELECT, UPDATE
-ON hotel
-TO admin;
+    ON hotel
+    TO admin;
 
 GRANT SELECT
-ON hotel
-TO manager;
+    ON hotel
+    TO manager;
 
 -- Транзакция.
 BEGIN;
